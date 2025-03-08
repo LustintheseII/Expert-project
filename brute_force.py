@@ -5,8 +5,36 @@ Program : brute force
 
 import itertools
 import string
+import math
+
+def complexity(code):
+    """calcule l'entropie d'un code donné."""
+    lenght = len(code)
+    type_de_domaine_recherche = 0
+    categories = {
+        "digits": (string.ascii_digits, 10),
+        "uppercase": (string.ascii_uppercase, 26),
+        "lowercase": (string.ascii_lowercase, 26),
+        "punctuation": (string.ascii_punctuation, 32)
+    }
+
+    used_categories = set()
+
+    for char in code:
+        for  cat_name, (char_set, value) in categories.items():
+            if char in char_set and cat_name not in used_categories:
+                type_de_domaine_recherche += value
+                used_categories.add(cat_name)
+    
+    if type_de_domaine_recherche == 0:
+        print("Code invalide : aucun caractère reconnu.")
+        return
+    
+    entropy = lenght * math.log2(type_de_domaine_recherche)
+    print(f"Complexité du code trouvé : {entropy:.2f} bits")
 
 def brute_force(target_code):
+    """essaie de trouver le code en testant toutes les combinaisons possibles"""
     characters = string.ascii_lowercase + string.digits + string.punctuation + string.ascii_uppercase
     attempts = 0
 
